@@ -112,6 +112,9 @@ assert.equal(
   compileBrief({ logline: "A bell.", seconds: 8, aspect: "1:1", script: "indigo" }).ok,
   false,
 );
+for (const input of [undefined, null, "text"]) {
+  assert.deepEqual(compileBrief(input), { ok: false, error: "Write the scene first." });
+}
 for (const bad of ["toString", "constructor", "__proto__"]) {
   assert.deepEqual(
     compileBrief({ logline: "A bell.", seconds: 8, aspect: bad, script: "indigo" }),
