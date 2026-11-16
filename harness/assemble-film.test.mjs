@@ -11,6 +11,10 @@ const film = { fps: 24, width: 1920, height: 1080, totalFrames: 480,
 assert.equal(validateTimeline(film), true);
 assert.throws(() => validateTimeline({ ...film, totalFrames: 481 }), /mismatch/);
 assert.throws(() => validateTimeline({ ...film, shots: [{ ...film.shots[0], startFrame: 1 }] }), /Noncontiguous/);
+const twoShots = [{ id: "scene-001", startFrame: 0, endFrame: 480, frames: 480 },
+  { id: "scene-001", startFrame: 480, endFrame: 960, frames: 480 }];
+assert.throws(() => validateTimeline({ ...film, totalFrames: 960, shots: twoShots }), /Duplicate shot id: scene-001/);
+assert.throws(() => validateTimeline({ ...film, shots: [null] }), /Invalid timeline/);
 const probe = { streams: [{ codec_type: "video", width: 1920, height: 1080,
   avg_frame_rate: "24/1", nb_frames: "480" }] };
 assert.doesNotThrow(() => validateProbe(probe, film.shots[0], film));
